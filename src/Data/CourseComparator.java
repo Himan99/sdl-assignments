@@ -12,10 +12,10 @@ public class CourseComparator implements Serializable ,Comparator<Course>  {
 
 	public int compare(Course o1, Course o2) {
 		// TODO Auto-generated method stub
-		if(o1.getPriority()<o2.getPriority())
+		if(o1.getPriority()>o2.getPriority())
 			return 1;
 
-		if(o1.getPriority()>o2.getPriority())
+		if(o1.getPriority()<o2.getPriority())
 			return -1;
 		
 		return 0;

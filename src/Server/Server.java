@@ -10,26 +10,75 @@ import java.net.Socket;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
+import Server.SignIn;
 import Data.User;
 
 public class Server {
 
+@SuppressWarnings("unchecked")
 public static void main(String[] args) {
-		
+	
+		String message=" ";
 		int port=4000;
+
+		SignIn s=new SignIn();
+		
 		try {
 			ServerSocket ss=new ServerSocket(port);
 			MyServerSocket mSocket= new MyServerSocket(port, ss);
-			for(int i=0;i<5;i++){
-//				Socket socket=ss.accept();
-//				ObjectInputStream inputStream=new ObjectInputStream(socket.getInputStream());
-//				ObjectOutputStream outputStream =new ObjectOutputStream(socket.getOutputStream());
-//				
-//				User user=(User)inputStream.readObject();
-//				String input=user.toString();
+			while(!message.equals("exit")){
+				
+				mSocket.initialize();
+				
+				JSONObject inputObject=(JSONObject) mSocket.read();
+				
+				message=(String) inputObject.get("message");
+				
+				JSONArray array=new JSONArray();
+				
+				JSONObject outputObject=new JSONObject();
+				
+				switch (message) {
+				case "login":{
+					outputObject=s.login(inputObject);
+					}
+					break;
+				case "register":{
+					outputObject=s.register(inputObject);
+				}
+					break;
+				case "update user":{
+					System.out.println("update user request object "+inputObject.toString());
+					User user =(User) inputObject.get("user");
+					user.display();
+//					array.add("a");
+//					array.add("b");
+//					array.add("c");
+//					array.add("d");
+					outputObject=new JSONObject();
+					outputObject.put("message", "updated");
+				}
+					break;
+				case "get courses":{
+					array.clear();
+					outputObject=new JSONObject();
+					array.add("a");
+					array.add("b");
+					array.add("c");
+					array.add("d");
+					outputObject.put("names", array);
+				}
+					break;
+				case "exit":
+					
+					break;
+				default:
+					break;
+				}
+				
+//				User user =(User)mSocket.read();
 //				user.display();
-//				System.out.println(input);
-//				
+				
 //				JSONArray array=new JSONArray();
 //				JSONObject jsonObject=new JSONObject();
 //				array.add("a");
@@ -40,26 +89,7 @@ public static void main(String[] args) {
 //				jsonObject.put("names", array);
 //				
 //				String output = jsonObject.toString();
-//
-//				outputStream.writeObject(jsonObject);
-//				outputStream.close();
-//				inputStream.close();
-//				socket.close();
-				mSocket.initialize();
-				User user =(User)mSocket.read();
-				user.display();
-				
-				JSONArray array=new JSONArray();
-				JSONObject jsonObject=new JSONObject();
-				array.add("a");
-				array.add("b");
-				array.add("c");
-				array.add("d");
-				
-				jsonObject.put("names", array);
-				
-				String output = jsonObject.toString();
-				mSocket.write(jsonObject);
+				mSocket.write(outputObject);
 				mSocket.close();
 			}
 //			ss.close();

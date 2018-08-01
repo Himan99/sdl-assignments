@@ -42,11 +42,17 @@ public class MainActivity {
 			case 2:
 				currentUser=s.register();
 				break;
-			case 3:
-				m.initialize();
+			case 3:{
 				listOfCourses.clear();
-				m.write(currentUser);
+				
+				JSONObject input=new JSONObject();
+//				input.put("user", currentUser);
+				input.put("message", "get courses");
+
+				m.initialize();
+				m.write(input);
 				JSONObject o=m.listen();
+				
 				JSONArray array=(JSONArray) o.get("names");
 		        for(int i=0;i<array.size();i++){
 		        	listOfCourses.add(new Course(array.get(i).toString(), "4hrs"));
@@ -54,12 +60,22 @@ public class MainActivity {
 		        for (int i = 0; i < listOfCourses.size(); i++) {
 		        	System.out.println(listOfCourses.get(i).getName());
 				}
+			}
 				break;
-			case 4:
+			case 4:{
 				currentUser.setPriorityQueue(listOfCourses);
+				JSONObject input2=new JSONObject();
+				input2.put("user", currentUser);
+				input2.put("message", "update user");
+				m.initialize();
+				m.write(input2);
+				JSONObject o2=m.listen();
+			}
 				break;
 			case 5:
-				
+				m.initialize();
+				m.write(new JSONObject().put("message", "exit"));
+				JSONObject o2=m.listen();
 				break;
 
 			default:
@@ -70,54 +86,6 @@ public class MainActivity {
 	}
 }
 
-
-class MySocket{
-	Socket socket = null;
-    ObjectOutputStream oos = null;
-    ObjectInputStream ois = null;
-	InetAddress host;
-	
-	public void initialize(){
-		try {
-			host = InetAddress.getLocalHost();
-	        socket = new Socket(host.getHostName(), 8080);
-	        oos = null;
-	        ois = null;
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
-	public void write(Object object){
-        
-        try {
-        	oos = new ObjectOutputStream(socket.getOutputStream());
-			oos.writeObject(object);
-//			oos.close();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
-	public JSONObject listen(){
-		JSONObject o=null;
-		try{	        
-	        ois=new ObjectInputStream(socket.getInputStream());
-	        o=(JSONObject)ois.readObject();
-	        System.out.println(o.toString());
-//	        ois.close();
-	    } catch (IOException e) {
-			e.printStackTrace();
-		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
-		}
-		return o;
-	}
-	@Override
-	protected void finalize() throws Throwable {
-		super.finalize();
-        socket.close();
-	}
-	
-}
 
 
 /*

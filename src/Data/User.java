@@ -10,9 +10,33 @@ public class User implements Serializable{
 	 * 
 	 */
 	private static final long serialVersionUID = -7680014466797872891L;
-	String name;
-	String rollno;
-	String dept;
+	private String name;
+	private String rollno;
+	public String getName() {
+		return name;
+	}
+	public void setName(String name) {
+		this.name = name;
+	}
+	public String getRollno() {
+		return rollno;
+	}
+	public void setRollno(String rollno) {
+		this.rollno = rollno;
+	}
+	public String getDept() {
+		return dept;
+	}
+	public void setDept(String dept) {
+		this.dept = dept;
+	}
+	public int getDiv() {
+		return div;
+	}
+	public void setDiv(int div) {
+		this.div = div;
+	}
+	private String dept;
 	int div;
 	private PriorityQueue<Course> priorityQueue;
 	public User(String name, String rollno) {
@@ -36,7 +60,7 @@ public class User implements Serializable{
 			int p;
 			Course course= listOfCourses.get(i);
 			String string = course.getName();
-			System.out.println("Set priority for"+string);
+			System.out.println("Set priority for "+string);
 			p=Utility.sc.nextInt();
 			course.setPriority(p);
 			priorityQueue.add(course);
