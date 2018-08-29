@@ -1,0 +1,5 @@
+Cyber security	1	12	80	Comp	3
+Science_of_happiness	2	4	80	Comp	3
+Emotional_Intelligence	3	12	80	Comp	3
+German	4	12	80	Comp	3
+Japanese	5	12	80	Comp	3

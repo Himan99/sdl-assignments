@@ -18,6 +18,7 @@ public class MainActivity {
 	static ArrayList<Course> listOfCourses=new ArrayList<Course>();
 	static User currentUser=null;
 	
+	@SuppressWarnings("unchecked")
 	public static void main(String[] args) throws Throwable {
 		Utility.initialize();
 //		m.initialize();
@@ -74,7 +75,9 @@ public class MainActivity {
 				break;
 			case 5:
 				m.initialize();
-				m.write(new JSONObject().put("message", "exit"));
+				JSONObject ip3=new JSONObject();
+				ip3.put("message", "exit");
+				m.write(ip3);
 				JSONObject o2=m.listen();
 				break;
 

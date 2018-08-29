@@ -4,12 +4,14 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 
 
 public abstract class MySqlAccess {
 	
-	private Connection connect = null;
+	public Connection connect = null;
 	  private Statement statement = null;
 	  private PreparedStatement preparedStatement = null;
 	  private ResultSet resultSet = null;
@@ -18,7 +20,7 @@ public abstract class MySqlAccess {
 	  final private String user = "te3346";
 	  final private String passwd = "te3346";
 	  
-	  public void readDataBase(String query ) throws Exception {
+	  public void readDataBase(String query ) {
 	    try {
 	      // This will load the MySQL driver, each DB has its own driver
 	      Class.forName("com.mysql.jdbc.Driver");
@@ -40,14 +42,60 @@ public abstract class MySqlAccess {
 	      
 	      
 	    } catch (Exception e) {
-	      throw e;
+	      e.printStackTrace();
 	    } finally {
 	      close();
 	    }
 
 	  }
-
-	private void close() {
+	  
+//	  void preparedStatmentInsert(ArrayList<Object> params,String query){
+//		  
+//		  try {
+//		  Class.forName("com.mysql.jdbc.Driver");
+//	      connect = DriverManager.getConnection("jdbc:mysql://" + host + "/te3346db?"
+//	    		  										+ "user=" + user + "&password=" + passwd );
+//		  preparedStatement = connect.prepareStatement(query);
+////		          .prepareStatement("insert into  student values (?,?,?,?,?,?,?)");
+//		      preparedStatement.setString(1, (String)params.get(0));
+//		      preparedStatement.setInt(2, (int)params.get(1));
+//		      preparedStatement.setString(3, (String)params.get(2));
+//		      preparedStatement.setInt(4, (int)params.get(3));
+//		      preparedStatement.setInt(5, (int)params.get(4));
+//		      preparedStatement.setString(6, (String)params.get(5));
+//		      preparedStatement.setString(7, (String)params.get(6));
+//		      preparedStatement.executeUpdate();
+//		  } catch (Exception e) {
+//		      e.printStackTrace();
+//		    } finally {
+//		      close();
+//		    }
+//	  }
+	  
+	  public PreparedStatement getPreparedStatement(String query) {
+		  try {
+			  Class.forName("com.mysql.jdbc.Driver");
+		      connect = DriverManager.getConnection("jdbc:mysql://" + host + "/te3346db?"
+		    		  										+ "user=" + user + "&password=" + passwd );
+			  preparedStatement = connect.prepareStatement(query);
+			  } catch (Exception e) {
+			      e.printStackTrace();
+			  }
+		return preparedStatement;
+	  }
+	  
+	  public void executePreparedStatement(PreparedStatement ps) {
+		  try {
+			  preparedStatement=ps;
+			  preparedStatement.executeUpdate();
+		  }catch (Exception e) {
+		      e.printStackTrace();
+		  } finally {
+		      close();
+		  }
+	  }
+	  
+	  private void close() {
 		    try {
 		      if (resultSet != null) {
 		        resultSet.close();
@@ -63,7 +111,7 @@ public abstract class MySqlAccess {
 		    } catch (Exception e) {
 
 		    }
-	}
+	  }
 
 //	abstract void writeMetaData(ResultSet resultSet2);
 

@@ -12,6 +12,16 @@ public class User implements Serializable{
 	private static final long serialVersionUID = -7680014466797872891L;
 	private String name;
 	private String rollno;
+	private String dept;
+	int div,year;
+	public int getYear() {
+		return year;
+	}
+	public void setYear(int year) {
+		this.year = year;
+	}
+	private PriorityQueue<Course> priorityQueue;
+	
 	public String getName() {
 		return name;
 	}
@@ -36,9 +46,6 @@ public class User implements Serializable{
 	public void setDiv(int div) {
 		this.div = div;
 	}
-	private String dept;
-	int div;
-	private PriorityQueue<Course> priorityQueue;
 	public User(String name, String rollno) {
 		this.name = name;
 		this.rollno = rollno;
@@ -50,6 +57,7 @@ public class User implements Serializable{
 		}else{
 			dept="EnTC";
 		}
+		year=Integer.valueOf(""+rollno.charAt(1));
 		priorityQueue=new PriorityQueue<Course>(new CourseComparator());
 	}
 	public PriorityQueue<Course> getPriorityQueue() {

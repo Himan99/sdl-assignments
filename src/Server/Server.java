@@ -86,7 +86,8 @@ public static void main(String[] args) {
 				}
 					break;
 				case "exit":
-					
+					outputObject=new JSONObject();
+					outputObject.put("message","bye" );
 					break;
 				default:
 					break;
