@@ -6,6 +6,7 @@ import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.sql.ResultSet;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -14,10 +15,12 @@ import Server.SignIn;
 import Data.User;
 
 public class Server {
-
+		static JSONArray array;
 @SuppressWarnings("unchecked")
 public static void main(String[] args) {
+
 	
+		array=new JSONArray();
 		String message=" ";
 		int port=4000;
 
@@ -33,8 +36,6 @@ public static void main(String[] args) {
 				JSONObject inputObject=(JSONObject) mSocket.read();
 				
 				message=(String) inputObject.get("message");
-				
-				JSONArray array=new JSONArray();
 				
 				JSONObject outputObject=new JSONObject();
 				
@@ -62,10 +63,25 @@ public static void main(String[] args) {
 				case "get courses":{
 					array.clear();
 					outputObject=new JSONObject();
-					array.add("a");
-					array.add("b");
-					array.add("c");
-					array.add("d");
+					MySqlAccess a= new MySqlAccess() {
+
+						@Override
+						void writeResultSet(ResultSet resultSet2) throws Exception {
+							 while (resultSet2.next()) {
+								 String name = resultSet2.getString("name");
+								 array.add(name);
+							 }
+						}
+					};
+					try {
+						a.readDataBase("select * from AuditCourse");
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
+//					array.add("a");
+//					array.add("b");
+//					array.add("c");
+//					array.add("d");
 					outputObject.put("names", array);
 				}
 					break;

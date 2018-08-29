@@ -44,9 +44,9 @@ public class User implements Serializable{
 		this.rollno = rollno;
 		div =Integer.valueOf(""+rollno.charAt(1));
 		if(div>=1 &&div<=4){
-			dept="Computer";
+			dept="Comp";
 		}else if(div>=5&&div<=8){
-			dept="InformationTecnology";
+			dept="IT";
 		}else{
 			dept="EnTC";
 		}

@@ -1,5 +1,6 @@
 package Server;
 
+import java.sql.ResultSet;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Scanner;
@@ -67,6 +68,19 @@ public class SignIn {
 			users.add(user);
 			pwMapping.put(username, pw);
 			userMap.put(username, user);
+			MySqlAccess a= new MySqlAccess() {
+
+				@Override
+				void writeResultSet(ResultSet resultSet2) {
+					
+				}
+			};
+			try {
+				a.readDataBase("select * from AuditCourse");
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 
 		JSONObject registerResponse=new JSONObject();

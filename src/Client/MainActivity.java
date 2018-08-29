@@ -90,7 +90,7 @@ public class MainActivity {
 
 /*
  * 
-
+ grant all on te3346db.* to ‘te3346’@’localhost’ identified by ‘te3346’
 himan
 himanshu
 3346
