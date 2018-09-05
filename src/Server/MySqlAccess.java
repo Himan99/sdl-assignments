@@ -94,7 +94,19 @@ public abstract class MySqlAccess {
 		      close();
 		  }
 	  }
-	  
+	  public void deletequery(String query) throws ClassNotFoundException, SQLException{
+		  Class.forName("com.mysql.jdbc.Driver");
+	      
+	      // Setup the connection with the DB
+	      connect = DriverManager
+	          .getConnection("jdbc:mysql://" + host + "/te3346db?"
+	              + "user=" + user + "&password=" + passwd );
+
+	      // Statements allow to issue SQL queries to the database
+	      statement = connect.createStatement();
+	      // Result set get the result of the SQL query
+	      statement.executeUpdate(query);
+	  }
 	  private void close() {
 		    try {
 		      if (resultSet != null) {

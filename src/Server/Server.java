@@ -1,17 +1,21 @@
 package Server;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.sql.Blob;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
 import Server.SignIn;
+import Data.Course;
 import Data.User;
 
 public class Server {
@@ -56,6 +60,38 @@ public static void main(String[] args) {
 //					array.add("b");
 //					array.add("c");
 //					array.add("d");
+					MySqlAccess a = new MySqlAccess() {
+
+						@Override
+						void writeResultSet(ResultSet resultSet2)
+								throws Exception {
+							
+							
+						}
+					};
+					int rno=Integer.parseInt(user.getRollno());
+					String query="update student set userObject = ? where rollno = ?";
+					PreparedStatement ps;
+					ps=a.getPreparedStatement(query);
+					ByteArrayOutputStream baos=new ByteArrayOutputStream();
+					ObjectOutputStream oos = new ObjectOutputStream(baos);
+					oos.writeObject(user);
+					oos.close();
+					Blob b1=a.connect.createBlob();
+					b1.setBytes(1, baos.toByteArray());
+					ps.setBlob(1,b1);
+					ps.setInt(2, rno);
+					a.executePreparedStatement(ps);
+					a.deletequery("delete from CourseMapping where studentid = "+user.getRollno());
+					for(Course c : user.getPriorityQueue()){
+						
+						ps=a.getPreparedStatement("Insert into CourseMapping values (?,?,?)");
+						System.out.printf("rno %d courseid %d prio %d", rno,c.getId(),c.getPriority());
+						ps.setInt(1, rno);
+						ps.setInt(2, c.getId());
+						ps.setInt(3, c.getPriority());
+						a.executePreparedStatement(ps);
+					}
 					outputObject=new JSONObject();
 					outputObject.put("message", "updated");
 				}
@@ -68,8 +104,14 @@ public static void main(String[] args) {
 						@Override
 						void writeResultSet(ResultSet resultSet2) throws Exception {
 							 while (resultSet2.next()) {
+								 JSONObject jo=new JSONObject();
 								 String name = resultSet2.getString("name");
-								 array.add(name);
+								 int id = resultSet2.getInt("id");
+								 int dur = resultSet2.getInt("duration");
+								 jo.put("name",name);
+								 jo.put("id",id);
+								 jo.put("dur",dur);
+								 array.add(jo);
 							 }
 						}
 					};

@@ -64,6 +64,7 @@ public class User implements Serializable{
 		return priorityQueue;
 	}
 	public void setPriorityQueue(ArrayList<Course> listOfCourses) {
+		priorityQueue.clear();
 		for (int i = 0; i < listOfCourses.size(); i++) {
 			int p;
 			Course course= listOfCourses.get(i);

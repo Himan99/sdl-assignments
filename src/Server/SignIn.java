@@ -35,13 +35,18 @@ public class SignIn {
 			void writeResultSet(ResultSet resultSet2) throws Exception {
 				while (resultSet2.next()) {
 					 String username = resultSet2.getString("username");
-					 String pw = resultSet2.getString("username");
-					 ObjectInputStream ios=new ObjectInputStream();
-					 User temp = 
+					 String pw = resultSet2.getString("pw");
+					 Blob b=resultSet2.getBlob("userObject");
+					 ObjectInputStream ios=new ObjectInputStream(b.getBinaryStream());
+					 User temp =(User) ios.readObject();
+					 temp.display();
+					 pwMapping.put(username, pw);
+					 userMap.put(username, temp);
+					 users.add(temp);
 				 }
 			}
 		};
-		String query="select username,pw from student";
+		String query="select * from student";
 		a.readDataBase(query);
 	}
 	public JSONObject login(JSONObject object){

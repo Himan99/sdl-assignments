@@ -49,14 +49,19 @@ public class MainActivity {
 				JSONObject input=new JSONObject();
 //				input.put("user", currentUser);
 				input.put("message", "get courses");
-
+				
 				m.initialize();
 				m.write(input);
 				JSONObject o=m.listen();
 				
 				JSONArray array=(JSONArray) o.get("names");
 		        for(int i=0;i<array.size();i++){
-		        	listOfCourses.add(new Course(array.get(i).toString(), "4hrs"));
+		        	JSONObject jo=(JSONObject) array.get(i);
+		        	String name;int id;int dur;
+		        	name=(String) jo.get("name");
+		        	id=(int) jo.get("id");
+		        	dur=(int) jo.get("dur");
+		        	listOfCourses.add(new Course(name,dur,id));
 		        }
 		        for (int i = 0; i < listOfCourses.size(); i++) {
 		        	System.out.println(listOfCourses.get(i).getName());
@@ -64,6 +69,10 @@ public class MainActivity {
 			}
 				break;
 			case 4:{
+				if(listOfCourses.size()==0) {
+					System.out.println("load courses first");
+					break;
+				}
 				currentUser.setPriorityQueue(listOfCourses);
 				JSONObject input2=new JSONObject();
 				input2.put("user", currentUser);
