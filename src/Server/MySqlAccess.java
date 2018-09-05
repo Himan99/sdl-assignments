@@ -46,7 +46,6 @@ public abstract class MySqlAccess {
 	    } finally {
 	      close();
 	    }
-
 	  }
 	  
 //	  void preparedStatmentInsert(ArrayList<Object> params,String query){

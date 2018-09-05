@@ -31,8 +31,7 @@ public static void main(String[] args) {
 		SignIn s=new SignIn();
 		
 		try {
-			ServerSocket ss=new ServerSocket(port);
-			MyServerSocket mSocket= new MyServerSocket(port, ss);
+			MyServerSocket mSocket= new MyServerSocket(port);
 			while(!message.equals("exit")){
 				
 				mSocket.initialize();
@@ -169,7 +168,7 @@ class MyServerSocket {
 	private ObjectInputStream inputStream ;
 	private ObjectOutputStream outputStream ;
 	private Socket socket;
-	public MyServerSocket(int port, ServerSocket ss) throws IOException {
+	public MyServerSocket(int port) throws IOException {
 		super();
 		this.port = 8080;
 		this.ss =new ServerSocket(this.port);

@@ -14,12 +14,12 @@ import org.json.simple.JSONObject;
 
 public class MainActivity {
 	
-	static MySocket m=new MySocket();
 	static ArrayList<Course> listOfCourses=new ArrayList<Course>();
 	static User currentUser=null;
 	
 	@SuppressWarnings("unchecked")
 	public static void main(String[] args) throws Throwable {
+		MySocket m=new MySocket();
 		Utility.initialize();
 //		m.initialize();
 		
