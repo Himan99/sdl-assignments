@@ -1,6 +1,5 @@
 package Client;
 
-import Data.*;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -11,6 +10,10 @@ import java.util.ArrayList;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
+
+import Data.Course;
+import Data.User;
+import Data.Utility;
 
 public class MainActivity {
 	
@@ -38,10 +41,10 @@ public class MainActivity {
 			choice= Utility.sc.nextInt();
 			switch (choice) {
 			case 1:
-				currentUser=s.login();
+				currentUser=s.login(m);
 				break;
 			case 2:
-				currentUser=s.register();
+				currentUser=s.register(m);
 				break;
 			case 3:{
 				listOfCourses.clear();
@@ -50,7 +53,6 @@ public class MainActivity {
 //				input.put("user", currentUser);
 				input.put("message", "get courses");
 				
-				m.initialize();
 				m.write(input);
 				JSONObject o=m.listen();
 				
@@ -77,13 +79,11 @@ public class MainActivity {
 				JSONObject input2=new JSONObject();
 				input2.put("user", currentUser);
 				input2.put("message", "update user");
-				m.initialize();
 				m.write(input2);
 				JSONObject o2=m.listen();
 			}
 				break;
 			case 5:
-				m.initialize();
 				JSONObject ip3=new JSONObject();
 				ip3.put("message", "exit");
 				m.write(ip3);

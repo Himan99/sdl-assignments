@@ -16,7 +16,7 @@ public class SignIn {
 	
 	Scanner sc=new Scanner(System.in);
 	
-	public User login() throws Throwable{
+	public User login(MySocket socket) throws Throwable{
 		User mUser=null;
 		JSONObject object=new JSONObject();
 		String username,pw;
@@ -31,9 +31,8 @@ public class SignIn {
 		object.put("message", "login");
 		
 		JSONObject outputObject;
-		
-		MySocket socket= new MySocket();
-		socket.initialize();
+//		MySocket socket= new MySocket();
+//		socket.initialize();
 		socket.write(object);
 		outputObject=socket.listen();
 		
@@ -45,10 +44,10 @@ public class SignIn {
 		else{
 			mUser=(User) outputObject.get("user");
 		}
-		socket.finalize();
+//		socket.finalize();
 		return mUser;
 	}
-	public User register() throws Throwable{
+	public User register(MySocket socket) throws Throwable{
 		User mUser=null;
 		JSONObject object=new JSONObject();
 		String username,pw;
@@ -75,8 +74,8 @@ public class SignIn {
 		
 		JSONObject outputObject;
 		
-		MySocket socket= new MySocket();
-		socket.initialize();
+//		MySocket socket= new MySocket();
+//		socket.initialize();
 		socket.write(object);
 		outputObject=socket.listen();
 		
@@ -89,7 +88,7 @@ public class SignIn {
 			mUser=(User) outputObject.get("user");
 		}
 
-		socket.finalize();
+//		socket.finalize();
 		return mUser;
 		
 //		users.add(user);

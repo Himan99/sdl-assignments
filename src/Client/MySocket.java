@@ -14,20 +14,31 @@ class MySocket{
     ObjectInputStream ois = null;
 	InetAddress host;
 	
-	public void initialize(){
+public MySocket() {
 		try {
 			host = InetAddress.getLocalHost();
-	        socket = new Socket(host.getHostName(), 8080);
-	        oos = null;
-	        ois = null;
+	        socket = new Socket(host.getHostName(), 4000);
+//	        oos = null;
+        	oos = new ObjectOutputStream(socket.getOutputStream());
+//	        ois = null;
+	        ois=new ObjectInputStream(socket.getInputStream());
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
+//	public void initialize(){
+//		try {
+//			host = InetAddress.getLocalHost();
+//	        socket = new Socket(host.getHostName(), 8080);
+//	        oos = null;
+//	        ois = null;
+//		} catch (IOException e) {
+//			e.printStackTrace();
+//		}
+//	}
 	public void write(Object object){
         
         try {
-        	oos = new ObjectOutputStream(socket.getOutputStream());
 			oos.writeObject(object);
 //			oos.close();
 		} catch (IOException e) {
@@ -37,7 +48,6 @@ class MySocket{
 	public JSONObject listen(){
 		JSONObject o=null;
 		try{	        
-	        ois=new ObjectInputStream(socket.getInputStream());
 	        o=(JSONObject)ois.readObject();
 	        System.out.println(o.toString());
 //	        ois.close();
@@ -51,6 +61,8 @@ class MySocket{
 	@Override
 	protected void finalize() throws Throwable {
 		super.finalize();
+		oos.close();
+		ois.close();
         socket.close();
 	}
 	

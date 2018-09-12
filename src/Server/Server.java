@@ -18,25 +18,70 @@ import Server.SignIn;
 import Data.Course;
 import Data.User;
 
+
 public class Server {
-		static JSONArray array;
 @SuppressWarnings("unchecked")
+
+
 public static void main(String[] args) {
 
+		SignIn sI=new SignIn();
+		int port=4000;
+		Socket s=null;
+		try {
+			ServerSocket ss=new ServerSocket(port);
+			while(true){
+				System.out.println("sever initialized");
+				s=ss.accept();
+				System.out.println("New user connected");
+				ObjectInputStream inputStream = new ObjectInputStream(s.getInputStream());
+				ObjectOutputStream outputStream = new ObjectOutputStream(s.getOutputStream());
+				Thread mSocket=new MyServerSocket(inputStream,outputStream,s,sI);
+				mSocket.start();
+			}
+		} catch (IOException e1) {
+			e1.printStackTrace();
+		}
+	}
+
+}
+
+class MyServerSocket extends Thread{
+	private ObjectInputStream inputStream ;
+	private ObjectOutputStream outputStream ;
+	private Socket socket;
+	private JSONArray array;
+	SignIn s;
+	public MyServerSocket(ObjectInputStream inputStream,
+			ObjectOutputStream outputStream, Socket socket,SignIn s) {
+		super();
+		this.s=s;
+		this.inputStream = inputStream;
+		this.outputStream = outputStream;
+		this.socket = socket;
+	}
+
+//	public void initialize(){
+//		try {
+//			socket = ss.accept();
+//			inputStream=new ObjectInputStream(socket.getInputStream());
+//			outputStream =new ObjectOutputStream(socket.getOutputStream());
+//		} catch (IOException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
+//	}
 	
+	@Override
+	public void run() {
 		array=new JSONArray();
 		String message=" ";
-		int port=4000;
 
-		SignIn s=new SignIn();
 		
 		try {
-			MyServerSocket mSocket= new MyServerSocket(port);
 			while(!message.equals("exit")){
 				
-				mSocket.initialize();
-				
-				JSONObject inputObject=(JSONObject) mSocket.read();
+				JSONObject inputObject=(JSONObject) read();
 				
 				message=(String) inputObject.get("message");
 				
@@ -55,10 +100,6 @@ public static void main(String[] args) {
 					System.out.println("update user request object "+inputObject.toString());
 					User user =(User) inputObject.get("user");
 					user.display();
-//					array.add("a");
-//					array.add("b");
-//					array.add("c");
-//					array.add("d");
 					MySqlAccess a = new MySqlAccess() {
 
 						@Override
@@ -85,7 +126,7 @@ public static void main(String[] args) {
 					for(Course c : user.getPriorityQueue()){
 						
 						ps=a.getPreparedStatement("Insert into CourseMapping values (?,?,?)");
-						System.out.printf("rno %d courseid %d prio %d", rno,c.getId(),c.getPriority());
+						//System.out.printf("rno %d courseid %d prio %d", rno,c.getId(),c.getPriority());
 						ps.setInt(1, rno);
 						ps.setInt(2, c.getId());
 						ps.setInt(3, c.getPriority());
@@ -119,10 +160,6 @@ public static void main(String[] args) {
 					} catch (Exception e) {
 						e.printStackTrace();
 					}
-//					array.add("a");
-//					array.add("b");
-//					array.add("c");
-//					array.add("d");
 					outputObject.put("names", array);
 				}
 					break;
@@ -133,54 +170,12 @@ public static void main(String[] args) {
 				default:
 					break;
 				}
-				
-//				User user =(User)mSocket.read();
-//				user.display();
-				
-//				JSONArray array=new JSONArray();
-//				JSONObject jsonObject=new JSONObject();
-//				array.add("a");
-//				array.add("b");
-//				array.add("c");
-//				array.add("d");
-//				
-//				jsonObject.put("names", array);
-//				
-//				String output = jsonObject.toString();
-				mSocket.write(outputObject);
-				mSocket.close();
+				write(outputObject);
 			}
-//			ss.close();
-			mSocket.finalize();
+			finalize();
 		} catch (IOException e) {
 			e.printStackTrace();
 		} catch (Throwable e) {
-			e.printStackTrace();
-		}
-
-	}
-
-}
-
-class MyServerSocket {
-	private int port=4000;
-	private ServerSocket ss;
-	private ObjectInputStream inputStream ;
-	private ObjectOutputStream outputStream ;
-	private Socket socket;
-	public MyServerSocket(int port) throws IOException {
-		super();
-		this.port = 8080;
-		this.ss =new ServerSocket(this.port);
-	}
-	
-	public void initialize(){
-		try {
-			socket = ss.accept();
-			inputStream=new ObjectInputStream(socket.getInputStream());
-			outputStream =new ObjectOutputStream(socket.getOutputStream());
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
@@ -216,7 +211,8 @@ class MyServerSocket {
 	@Override
 	protected void finalize() throws Throwable {
 		super.finalize();
-		ss.close();
+		close();
+//		ss.close();
 	}
 	
 	
