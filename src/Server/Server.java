@@ -36,8 +36,8 @@ public static void main(String[] args) {
 				System.out.println("New user connected");
 				ObjectInputStream inputStream = new ObjectInputStream(s.getInputStream());
 				ObjectOutputStream outputStream = new ObjectOutputStream(s.getOutputStream());
-				Thread mSocket=new MyServerSocket(inputStream,outputStream,s,sI);
-				mSocket.start();
+				Thread mClient=new MyClientHandler(inputStream,outputStream,s,sI);
+				mClient.start();
 			}
 		} catch (IOException e1) {
 			e1.printStackTrace();
@@ -46,13 +46,13 @@ public static void main(String[] args) {
 
 }
 
-class MyServerSocket extends Thread{
+class MyClientHandler extends Thread{
 	private ObjectInputStream inputStream ;
 	private ObjectOutputStream outputStream ;
 	private Socket socket;
 	private JSONArray array;
 	SignIn s;
-	public MyServerSocket(ObjectInputStream inputStream,
+	public MyClientHandler(ObjectInputStream inputStream,
 			ObjectOutputStream outputStream, Socket socket,SignIn s) {
 		super();
 		this.s=s;
@@ -60,17 +60,6 @@ class MyServerSocket extends Thread{
 		this.outputStream = outputStream;
 		this.socket = socket;
 	}
-
-//	public void initialize(){
-//		try {
-//			socket = ss.accept();
-//			inputStream=new ObjectInputStream(socket.getInputStream());
-//			outputStream =new ObjectOutputStream(socket.getOutputStream());
-//		} catch (IOException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
-//	}
 	
 	@Override
 	public void run() {
@@ -90,7 +79,7 @@ class MyServerSocket extends Thread{
 				switch (message) {
 				case "login":{
 					outputObject=s.login(inputObject);
-					}
+				}
 					break;
 				case "register":{
 					outputObject=s.register(inputObject);
