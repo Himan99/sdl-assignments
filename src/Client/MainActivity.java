@@ -75,6 +75,10 @@ public class MainActivity {
 					System.out.println("load courses first");
 					break;
 				}
+				if(currentUser==null){
+					System.out.println("please register or login");
+					break;
+				}
 				currentUser.setPriorityQueue(listOfCourses);
 				JSONObject input2=new JSONObject();
 				input2.put("user", currentUser);
