@@ -41,10 +41,10 @@ public class MainActivity {
 			choice= Utility.sc.nextInt();
 			switch (choice) {
 			case 1:
-				currentUser=s.login(m);
+//				currentUser=s.login(m);
 				break;
 			case 2:
-				currentUser=s.register(m);
+//				currentUser=s.register(m);
 				break;
 			case 3:{
 				listOfCourses.clear();

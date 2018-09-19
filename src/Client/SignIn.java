@@ -16,15 +16,9 @@ public class SignIn {
 	
 	Scanner sc=new Scanner(System.in);
 	
-	public User login(MySocket socket) throws Throwable{
+	public User login(MySocket socket,String username,String pw) throws Throwable{
 		User mUser=null;
 		JSONObject object=new JSONObject();
-		String username,pw;
-		
-		System.out.println("Enter Username");
-		username=sc.next();
-		System.out.println("Enter password");
-		pw=sc.next();
 		
 		object.put("username", username);
 		object.put("pw", pw);
@@ -47,29 +41,23 @@ public class SignIn {
 //		socket.finalize();
 		return mUser;
 	}
-	public User register(MySocket socket) throws Throwable{
+	public User register(MySocket socket, JSONObject object) throws Throwable{
 		User mUser=null;
-		JSONObject object=new JSONObject();
-		String username,pw;
-		String name,rollno;
+//		String username,pw;
+//		String name,rollno;
+//		
+//		System.out.println("Enter username");
+//		username=sc.next();
+//		
+//		System.out.println("Enter Name");
+//		name=sc.next();
+//		
+//		System.out.println("Enter Rollno");
+//		rollno=sc.next();
+//		
+//		System.out.println("Enter password");
+//		pw=sc.next();
 		
-		System.out.println("Enter username");
-		username=sc.next();
-		
-		System.out.println("Enter Name");
-		name=sc.next();
-		
-		System.out.println("Enter Rollno");
-		rollno=sc.next();
-		
-		System.out.println("Enter password");
-		pw=sc.next();
-		
-		object.put("username", username);
-		object.put("pw", pw);
-		object.put("name", name);
-		object.put("rollno", rollno);
-		object.put("message", "register");
 		
 		
 		JSONObject outputObject;

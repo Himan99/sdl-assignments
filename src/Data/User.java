@@ -63,7 +63,7 @@ public class User implements Serializable{
 	public PriorityQueue<Course> getPriorityQueue() {
 		return priorityQueue;
 	}
-	public void setPriorityQueue(ArrayList<Course> listOfCourses) {
+	/*public void setPriorityQueue(ArrayList<Course> listOfCourses) {
 		priorityQueue.clear();
 		for (int i = 0; i < listOfCourses.size(); i++) {
 			int p;
@@ -76,10 +76,21 @@ public class User implements Serializable{
 		}
 		if(priorityQueue.peek()!=null)
 		System.out.println(priorityQueue.peek().getName());
+	}*/
+	
+	public void setPriorityQueue(ArrayList<Course> listOfCourses) {
+		priorityQueue.clear();
+		for (int i = 0; i < listOfCourses.size(); i++) {
+			int p;
+			Course course= listOfCourses.get(i);
+			String string = course.getName();
+			course.setPriority(i);
+			priorityQueue.add(course);
+		}
+		if(priorityQueue.peek()!=null)
+		System.out.println(priorityQueue.peek().getName());
 	}
-//	public void setPriorityQueue(PriorityQueue<Course> p) {
-//		this.priorityQueue=p;
-//	}
+	
 	public void display(){
 		System.out.println(name);
 		System.out.println(rollno);
