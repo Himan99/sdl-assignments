@@ -2,7 +2,10 @@ package ClientGUI;
 import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 import java.util.ArrayList;
+import java.util.Vector;
 
 import javax.swing.*;  
 
@@ -18,6 +21,48 @@ public class MainScreen {
 	public static void main(String[] args) {
 		f=new JFrame();
 		scc=new SeverConnectClass();
+		f.addWindowListener(new WindowListener() {
+			
+			@Override
+			public void windowOpened(WindowEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void windowIconified(WindowEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void windowDeiconified(WindowEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void windowDeactivated(WindowEvent e) {
+				
+			}
+			
+			@Override
+			public void windowClosing(WindowEvent e) {
+				scc.exit();
+				
+			}
+			
+			@Override
+			public void windowClosed(WindowEvent e) {
+				scc.exit();
+				
+			}
+			
+			@Override
+			public void windowActivated(WindowEvent e) {
+				
+			}
+		});
 		JPanel p=new JPanel();
 		p.setBounds(10,10,380,340);    
         p.setBackground(Color.gray);  
@@ -152,8 +197,6 @@ public class MainScreen {
 		return f1;
 	}
 	public static JPanel getSelectorPanel() {
-		final ArrayList<Course> list1=scc.getCourses();
-		final ArrayList<Course> list2=new ArrayList<Course>();
 		
 		
 		JPanel panel = new JPanel();
@@ -161,7 +204,7 @@ public class MainScreen {
 		panel.setLayout(null);
 		
 
-		final JList list = new JList(toStringArray(list1));
+		final JList list = new JList();
 		list.setBounds(12, 100, 186, 184);
 		panel.add(list);
 		
@@ -221,25 +264,33 @@ public class MainScreen {
 		lblYear.setBounds(286, 38, 70, 15);
 		panel.add(lblYear);
 		
-		JLabel lblmName = new JLabel("mName");
+		JLabel lblmName = new JLabel(scc.currentUser.getName());
 		lblmName.setBounds(126, 11, 148, 16);
 		
 		panel.add(lblmName);
 		
-		JLabel lblmDept = new JLabel("mDept");
+		JLabel lblmDept = new JLabel(scc.currentUser.getDept());
 		lblmDept.setBounds(126, 37, 148, 16);
 		panel.add(lblmDept);
 		
-		JLabel lblmRollNO = new JLabel("New label");
+		JLabel lblmRollNO = new JLabel(scc.currentUser.getRollno());
 		lblmRollNO.setBounds(368, 11, 176, 16);
 		panel.add(lblmRollNO);
 		
-		JLabel lblmYear = new JLabel("New label");
+		JLabel lblmYear = new JLabel(String.valueOf(scc.currentUser.getYear()));
 		lblmYear.setBounds(368, 37, 145, 16);
 		panel.add(lblmYear);
 		
 ActionListener actionListener =new ActionListener() {
 			
+
+			ArrayList<Course> list1=scc.getCourses();
+			ArrayList<Course> list2=new ArrayList<Course>();
+			ArrayList<Course> listorig=new ArrayList<Course>(list1);
+			String serverMessage;
+			ArrayList<Course> listsubmit=new ArrayList<Course>();
+			ArrayList<Integer> v= new  ArrayList<Integer>();
+			int n=list1.size();
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				JButton b=(JButton) e.getSource();
@@ -247,15 +298,32 @@ ActionListener actionListener =new ActionListener() {
 //				frame.setVisible(false);
 				switch(b.getText()){
 				case "Submit":{
-					
-				}
-					lblMessage.setText("Submited");
+					System.out.println(n);
+						if(n==list2.size()){
+							for (int i = 0; i < list2.size(); i++) {
+								listsubmit.add(list2.get(i));
+							}
+							serverMessage=scc.submitResponse(listsubmit);
+						}
+						else{
+							serverMessage="please select all elements";
+						}
+					}
+					lblMessage.setText(serverMessage);
 					break;
 				case "Reset":
+					list1=listorig;
+					list2=new ArrayList<Course>();
+					list.setListData(toStringArray(list1));
+					list_1.setListData(toStringArray(list2));
 					lblMessage.setText("Reseted");
 					break;
 				case "Reload":
-					lblMessage.setText("Reloaded");
+					list1=scc.getCourses();
+					list2=new ArrayList<Course>();
+					list.setListData(toStringArray(list1));
+					list_1.setListData(toStringArray(list2));
+					lblMessage.setText("List of coures reloaded from server");
 					break;
 				case ">>>":{
 					int i=list.getSelectedIndex();
@@ -264,6 +332,8 @@ ActionListener actionListener =new ActionListener() {
 					list.setListData(toStringArray(list1));
 					list_1.setListData(toStringArray(list2));
 					lblMessage.setText("inserted");
+					v.add(i);
+					System.out.println(list1.size()+" "+list2.size());
 				}
 				break;
 				case "<<<":{
@@ -273,6 +343,8 @@ ActionListener actionListener =new ActionListener() {
 					list.setListData(toStringArray(list1));
 					list_1.setListData(toStringArray(list2));
 					lblMessage.setText("removed");
+					v.remove(i);
+					System.out.println(list1.size()+" "+list2.size());
 				}
 				break;
 				default:
